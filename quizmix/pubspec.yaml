@@ -15,5 +15,12 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^5.0.0
 
+fonts:
+  -family: baloo
+  fonts:
+      -assets: '/assets/fonts/baloo/Baloo2-VariableFont_wght.ttf'
+
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/
