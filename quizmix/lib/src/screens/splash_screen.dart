@@ -1,7 +1,6 @@
 // ignore: file_names
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:quizmix/src/custom/constants.dart';
 import 'package:quizmix/src/screens/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {

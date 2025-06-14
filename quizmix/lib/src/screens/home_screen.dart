@@ -1,6 +1,5 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
-import 'package:quizmix/src/custom/constants.dart';
 import 'package:quizmix/src/screens/categories_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -18,10 +17,7 @@ class HomeScreen extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: Text('Inicio'),
-          backgroundColor: Colors.transparent,
-        ),
+        appBar: AppBar(backgroundColor: Colors.transparent),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -38,7 +34,24 @@ class HomeScreen extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => CategoryScreen()),
                   );
                 },
-                child: Text('Individual'),
+                child: SizedBox(
+                  width: 150,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.person, size: 25, color: Colors.red),
+                      Text(
+                        'Individual',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
               SizedBox(height: 20),
               ElevatedButton(
@@ -48,7 +61,24 @@ class HomeScreen extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => CategoryScreen()),
                   );
                 },
-                child: Text('Cronometrado'),
+                child: SizedBox(
+                  width: 150,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.timer, size: 25, color: Colors.red),
+                      Text(
+                        'Timer',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
               SizedBox(height: 20),
               ElevatedButton(
@@ -58,7 +88,24 @@ class HomeScreen extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => CategoryScreen()),
                   );
                 },
-                child: Text('Desafio'),
+                child: SizedBox(
+                  width: 150,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.calendar_month, size: 20, color: Colors.red),
+                      Text(
+                        'Desafio',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
