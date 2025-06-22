@@ -41,11 +41,11 @@ class CategoryScreen extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(title: Text("Categorias")),
+        appBar: AppBar(backgroundColor: Colors.transparent),
         body: Column(
           children: [
             SizedBox(height: 15),
-            Image.asset('assets/images/title_logo.png', width: 225),
+            Image.asset('assets/images/title_logo_nuevo.png', width: 225),
             SizedBox(height: 15),
             Text(
               "Selecciona una Categoría",

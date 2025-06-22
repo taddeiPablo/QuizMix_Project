@@ -15,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 10), () {
+    Timer(Duration(seconds: 5), () {
       Navigator.of(
         context,
       ).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
               //Text('QuizMix', style: Constants.fontTitle),
               // Puedes cambiar esto por un logo o imagen temática
               SizedBox(height: 20),
-              Image.asset('assets/images/title_logo.png', width: 340),
+              Image.asset('assets/images/title_logo_nuevo.png', width: 340),
               Image.asset('assets/images/answer_logo.png', width: 220),
               SizedBox(height: 10),
               CircularProgressIndicator(color: Colors.white),
