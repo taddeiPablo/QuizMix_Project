@@ -408,119 +408,134 @@ class _GameScreenState extends State<GameScreen> {
   Widget build(BuildContext context) {
     double progressPercent = (currentQuestionIndex + 1) / questions.length;
 
-    return Scaffold(
-      appBar: AppBar(title: Text("Trivia + Sopa de Letras")),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Row(
-            children: [
-              Text(
-                widget.category,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/background_2.png'),
+          fit: BoxFit.fill,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: Text("Trivia + Sopa de Letras"),
+          backgroundColor: Colors.transparent,
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Text(
+                  widget.category,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'Puntaje: $score',
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            Text(
+              "Tiempo restante: $timeRemaining s",
+              style: TextStyle(fontSize: 16, color: Colors.red),
+            ),
+            SizedBox(height: 8),
+            Text(
+              questions[currentQuestionIndex].text,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            ),
+            // 🧠 Pregunta actual / total
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text(
+                "Pregunta ${currentQuestionIndex + 1} de ${questions.length}",
+                style: TextStyle(fontSize: 16, color: Colors.black87),
+              ),
+            ),
+            // 🟢 Barra de progreso animada debajo de la pregunta
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 8.0,
+                horizontal: 16,
+              ),
+              child: TweenAnimationBuilder<double>(
+                tween: Tween<double>(begin: 0, end: progressPercent),
+                duration: Duration(milliseconds: 500),
+                builder: (context, value, child) {
+                  // Interpolación del color según progreso
+                  Color progressColor;
+                  if (value < 0.33) {
+                    progressColor = Colors.red;
+                  } else if (value < 0.66) {
+                    progressColor = Colors.orange;
+                  } else {
+                    progressColor = Colors.green;
+                  }
+
+                  return LinearProgressIndicator(
+                    value: value,
+                    backgroundColor: Colors.grey[300],
+                    color: progressColor,
+                    minHeight: 8,
+                  );
+                },
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: ElevatedButton.icon(
+                onPressed: _showHints,
+                icon: Icon(Icons.help_outline),
+                label: Text("Ayuda"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey[200],
+                  foregroundColor: Colors.black,
                 ),
               ),
-              Text(
-                'Puntaje: $score',
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+            ),
+
+            Expanded(
+              child: GridView.builder(
+                padding: EdgeInsets.all(12),
+                itemCount: gridSize * gridSize,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: gridSize,
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: 16),
-          Text(
-            "Tiempo restante: $timeRemaining s",
-            style: TextStyle(fontSize: 16, color: Colors.red),
-          ),
-          SizedBox(height: 8),
-          Text(
-            questions[currentQuestionIndex].text,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-          ),
-          // 🧠 Pregunta actual / total
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Text(
-              "Pregunta ${currentQuestionIndex + 1} de ${questions.length}",
-              style: TextStyle(fontSize: 16, color: Colors.black87),
-            ),
-          ),
-          // 🟢 Barra de progreso animada debajo de la pregunta
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-            child: TweenAnimationBuilder<double>(
-              tween: Tween<double>(begin: 0, end: progressPercent),
-              duration: Duration(milliseconds: 500),
-              builder: (context, value, child) {
-                // Interpolación del color según progreso
-                Color progressColor;
-                if (value < 0.33) {
-                  progressColor = Colors.red;
-                } else if (value < 0.66) {
-                  progressColor = Colors.orange;
-                } else {
-                  progressColor = Colors.green;
-                }
-
-                return LinearProgressIndicator(
-                  value: value,
-                  backgroundColor: Colors.grey[300],
-                  color: progressColor,
-                  minHeight: 8,
-                );
-              },
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: ElevatedButton.icon(
-              onPressed: _showHints,
-              icon: Icon(Icons.help_outline),
-              label: Text("Ayuda"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.grey[200],
-                foregroundColor: Colors.black,
-              ),
-            ),
-          ),
-
-          Expanded(
-            child: GridView.builder(
-              padding: EdgeInsets.all(12),
-              itemCount: gridSize * gridSize,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: gridSize,
-              ),
-              itemBuilder: (context, index) {
-                int row = index ~/ gridSize;
-                int col = index % gridSize;
-                return GestureDetector(
-                  onTap: () => _onCellTap(row, col),
-                  child: Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                      color: _getCellColor(row, col),
-                      border: Border.all(color: Colors.black26),
-                    ),
-                    child: Text(
-                      grid[row][col],
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                itemBuilder: (context, index) {
+                  int row = index ~/ gridSize;
+                  int col = index % gridSize;
+                  return GestureDetector(
+                    onTap: () => _onCellTap(row, col),
+                    child: Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        color: _getCellColor(row, col),
+                        border: Border.all(color: Colors.black26),
+                      ),
+                      child: Text(
+                        grid[row][col],
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
