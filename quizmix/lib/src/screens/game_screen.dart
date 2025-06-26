@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:quizmix/src/custom/constants.dart';
 import 'package:quizmix/src/screens/Victory_screen.dart';
 
 class Question {
@@ -41,10 +42,8 @@ class _GameScreenState extends State<GameScreen> {
   Map<String, List<Question>> questionCategories = {
     'Historia': [
       Question('¿En qué año comenzó la Segunda Guerra Mundial?', '1939'),
-      Question(
-        '¿Quién fue el primer presidente de EE.UU?',
-        'George Washington',
-      ),
+      Question('¿Quién fue el primer presidente de EE.UU?', 'GeorgeWashington'),
+      Question('¿Quien fue el primer presidente de Argentina?', 'Rivadavia'),
     ],
     'Deportes': [
       Question('¿Cuántos jugadores hay en un equipo de fútbol?', '11'),
@@ -53,8 +52,10 @@ class _GameScreenState extends State<GameScreen> {
       Question('¿Ultimo muldial que gano Argentina ?', '2022'),
       Question('¿Primer mundial de la Historia ?', '1930'),
       Question('¿En que equipo de Italia jugo MARADONA?', 'NAPOLI'),
-      Question('¿Enn que equipo de España jugo Messi?', 'Barcelona'),
-      Question('¿En qué país se originó el judo?', 'Japón'),
+      Question('¿En que equipo de España jugo Messi?', 'Barcelona'),
+      Question('¿En qué país se origino el Futbol Americano ?', 'Eeuu'),
+      Question('¿En que pais se realizo el primer Juego Olimpico ?', 'Grecia'),
+      Question('¿ cuantos jugadores se necesita para jugar al basket ?', '5'),
     ],
     'Geografía': [
       Question('¿Cuál es el río más largo del mundo?', 'Nilo'),
@@ -72,22 +73,28 @@ class _GameScreenState extends State<GameScreen> {
       ),
     ],
     'Paises': [
-      Question("Capital de Francia", "PARIS"),
-      Question("Capital de Argentina", "BUENOS AIRES"),
-      Question("Capital de España", "MADRID"),
-      Question('Capital de Noruega', 'Oslok'),
-      Question('Capital de Rusia', 'Moscu'),
-      Question('Capital de Alemania', 'Berlin'),
-      Question('Capital de Uruguay', 'Montevideo'),
-      Question('Capital de Brasil', 'Brasilia'),
-      Question('Capital de china', 'Pekin'),
-      Question('Capital de Italia', 'Roma'),
+      Question("Cual es la Capital de Francia ?", "PARIS"),
+      Question("Cual es la Capital de Argentina ?", "BUENOSAIRES"),
+      Question("Cual es la Capital de España ?", "MADRID"),
+      Question('Cual es la Capital de Noruega ?', 'Oslok'),
+      Question('Cual es la Capital de Rusia ?', 'Moscu'),
+      Question('Cual es la Capital de Alemania ?', 'Berlin'),
+      Question('Cual es la Capital de Uruguay ?', 'Montevideo'),
+      Question('Cual es la Capital de Brasil ?', 'Brasilia'),
+      Question('Cual es la Capital de china ?', 'Pekin'),
+      Question('Cual es la Capital de Italia ?', 'Roma'),
     ],
     'Ciencia': [
       Question("El hidrogeno es un Elemento del ?", "AGUA"),
       Question('¿Planeta mas grande del sistema solar ?', 'Jupiter'),
       Question('¿La Atmosfera de cuantas capas esta formada ?', 'cinco'),
-      Question('¿En qué país se originó el judo?', 'Japón'),
+      Question('¿ abreviatura de electricidad Alterna y continua ?', 'acdc'),
+      Question('¿ cual es el simbolo quimico del Oro ?', 'Au'),
+      Question('¿ creador de la tabla periodica ?', 'Mendeleyev'),
+      Question('¿ creador de la lampara electrica ?', 'Edison'),
+      Question('¿ creador de la imprenta ?', 'Gutenberg'),
+      Question('¿ creador del automovil ?', 'Ford'),
+      Question('¿ cual es el simbolo quimico del Aluminio ?', 'Al'),
     ],
   };
 
@@ -226,32 +233,6 @@ class _GameScreenState extends State<GameScreen> {
       );
     }
   }
-
-  /*void _moveToNextQuestion() {
-    timer?.cancel();
-    hintPositions.clear();
-    helpUsed = false;
-    if (currentQuestionIndex < questions.length - 1) {
-      setState(() {
-        currentQuestionIndex++;
-        selectedPath.clear();
-        _clearSelection();
-        _startTimer();
-      });
-    } else {
-      // Fin del juego
-      setState(() {
-        timeRemaining = 0;
-      });
-      _backgroundPlayer.stop();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (_) => VictoryScreen(score: foundWords.length),
-        ),
-      );
-    }
-  }*/
 
   void _startNewGame() {
     setState(() {
@@ -417,53 +398,66 @@ class _GameScreenState extends State<GameScreen> {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: Text("Trivia + Sopa de Letras"),
-          backgroundColor: Colors.transparent,
-        ),
+        appBar: AppBar(backgroundColor: Colors.transparent),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
+            Column(
               children: [
-                Text(
-                  widget.category,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                /*Image.asset('assets/images/title_logo_nuevo.png', width: 210),*/
+                Text(widget.category, style: Constants.fontGame),
+                Text('Puntaje: $score', style: Constants.fontScore),
+              ],
+            ),
+            SizedBox(height: 15),
+            // codigo quitado : "Tiempo restante: $timeRemaining s"
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.timer,
+                  size: 35,
+                  color: const Color.fromARGB(255, 186, 243, 188),
                 ),
                 Text(
-                  'Puntaje: $score',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                  "  $timeRemaining s",
+                  style: TextStyle(
+                    fontSize: 22,
+                    color: const Color.fromARGB(255, 186, 243, 188),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 16),
-            Text(
-              "Tiempo restante: $timeRemaining s",
-              style: TextStyle(fontSize: 16, color: Colors.red),
-            ),
-            SizedBox(height: 8),
-            Text(
-              questions[currentQuestionIndex].text,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            SizedBox(height: 2),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 18.0,
+                bottom: 10.0,
+                right: 16,
+                left: 16,
+              ),
+              child: Text(
+                questions[currentQuestionIndex].text,
+                textAlign: TextAlign.center,
+                style: Constants.fontQuestions,
+              ),
             ),
             // 🧠 Pregunta actual / total
             Padding(
-              padding: const EdgeInsets.only(top: 8.0),
+              padding: const EdgeInsets.only(top: 10.0, right: 16, left: 16),
               child: Text(
                 "Pregunta ${currentQuestionIndex + 1} de ${questions.length}",
-                style: TextStyle(fontSize: 16, color: Colors.black87),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: const Color.fromARGB(255, 255, 98, 7),
+                ),
               ),
             ),
             // 🟢 Barra de progreso animada debajo de la pregunta
             Padding(
               padding: const EdgeInsets.symmetric(
-                vertical: 8.0,
+                vertical: 4.0,
                 horizontal: 16,
               ),
               child: TweenAnimationBuilder<double>(
@@ -482,7 +476,7 @@ class _GameScreenState extends State<GameScreen> {
 
                   return LinearProgressIndicator(
                     value: value,
-                    backgroundColor: Colors.grey[300],
+                    backgroundColor: const Color.fromARGB(255, 255, 254, 254),
                     color: progressColor,
                     minHeight: 8,
                   );
@@ -491,14 +485,14 @@ class _GameScreenState extends State<GameScreen> {
             ),
 
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: ElevatedButton.icon(
                 onPressed: _showHints,
                 icon: Icon(Icons.help_outline),
                 label: Text("Ayuda"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.grey[200],
-                  foregroundColor: Colors.black,
+                  foregroundColor: Colors.redAccent,
                 ),
               ),
             ),
