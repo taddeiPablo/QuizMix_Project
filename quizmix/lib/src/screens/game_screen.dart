@@ -117,12 +117,14 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   final List<Color> wordColors = [
-    Colors.green,
-    Colors.blue,
+    const Color.fromARGB(255, 151, 235, 154),
+    const Color.fromARGB(255, 38, 65, 185),
     Colors.red,
     Colors.purple,
     Colors.orange,
-    Colors.teal,
+    const Color.fromARGB(255, 0, 78, 70),
+    Colors.deepOrange,
+    Colors.pink,
   ];
 
   // Temporizador
@@ -404,12 +406,11 @@ class _GameScreenState extends State<GameScreen> {
           children: [
             Column(
               children: [
-                /*Image.asset('assets/images/title_logo_nuevo.png', width: 210),*/
                 Text(widget.category, style: Constants.fontGame),
                 Text('Puntaje: $score', style: Constants.fontScore),
               ],
             ),
-            SizedBox(height: 15),
+            SizedBox(height: 10),
             // codigo quitado : "Tiempo restante: $timeRemaining s"
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -431,7 +432,7 @@ class _GameScreenState extends State<GameScreen> {
             SizedBox(height: 2),
             Padding(
               padding: const EdgeInsets.only(
-                top: 18.0,
+                top: 10.0,
                 bottom: 10.0,
                 right: 16,
                 left: 16,
