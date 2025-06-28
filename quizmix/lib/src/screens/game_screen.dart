@@ -42,8 +42,15 @@ class _GameScreenState extends State<GameScreen> {
   Map<String, List<Question>> questionCategories = {
     'Historia': [
       Question('¿En qué año comenzó la Segunda Guerra Mundial?', '1939'),
-      Question('¿Quién fue el primer presidente de EE.UU?', 'GeorgeWashington'),
+      Question('¿Quién fue el primer presidente de EE.UU?', 'Washington'),
       Question('¿Quien fue el primer presidente de Argentina?', 'Rivadavia'),
+      Question('¿Año en que se declaro la independencia Argentina?', '1816'),
+      Question('¿Final de la Ssegunda guerra mundial?', '1945'),
+      Question('¿Año del descubrimiento de America ?', '1492'),
+      Question('¿Año de nacimiento de Borges?', '1899'),
+      Question('¿Nombre de pila del lider revolucionario Cubano ?', 'Fidel'),
+      Question('¿Cuando fue la llega del hombre a la luna ?', '1969'),
+      Question('¿Donde nacio vicent Van gogh?', 'Holanda'),
     ],
     'Deportes': [
       Question('¿Cuántos jugadores hay en un equipo de fútbol?', '11'),
@@ -108,6 +115,7 @@ class _GameScreenState extends State<GameScreen> {
   final AudioPlayer _backgroundPlayer = AudioPlayer();
 
   void _playSound(String sound) async {
+    //_audioPlayer.setVolume(50);
     await _audioPlayer.play(AssetSource('sounds/$sound'));
   }
 
@@ -117,14 +125,15 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   final List<Color> wordColors = [
-    const Color.fromARGB(255, 151, 235, 154),
-    const Color.fromARGB(255, 38, 65, 185),
+    const Color.fromARGB(255, 26, 128, 30),
+    const Color.fromARGB(255, 7, 42, 197),
     Colors.red,
     Colors.purple,
     Colors.orange,
     const Color.fromARGB(255, 0, 78, 70),
     Colors.deepOrange,
     Colors.pink,
+    const Color.fromARGB(255, 45, 4, 116),
   ];
 
   // Temporizador
@@ -334,6 +343,7 @@ class _GameScreenState extends State<GameScreen> {
 
     if (selectedWord == questions[currentQuestionIndex].answer.toUpperCase()) {
       _playSound('success.mp3');
+      _audioPlayer.setVolume(100);
       foundWords.add(selectedWord);
       _onCorrectAnswer(selectedWord);
       selectedPath.clear();
@@ -363,7 +373,7 @@ class _GameScreenState extends State<GameScreen> {
     final point = Point(row, col);
 
     if (hintPositions.contains(point)) {
-      return Colors.grey[300]!;
+      return Colors.red;
     }
 
     for (int i = 0; i < foundWords.length; i++) {
@@ -377,7 +387,31 @@ class _GameScreenState extends State<GameScreen> {
       }
     }
 
-    return selectedPositions[row][col] ? Colors.yellow : Colors.white;
+    return selectedPositions[row][col]
+        ? const Color.fromARGB(255, 185, 167, 5)
+        : Colors.white;
+  }
+
+  Color _getCellLetterColor(int row, int col) {
+    final point = Point(row, col);
+
+    if (hintPositions.contains(point)) {
+      return Colors.black;
+    }
+
+    for (int i = 0; i < foundWords.length; i++) {
+      final word = foundWords[i];
+      final inserted = insertedWords.firstWhere(
+        (w) => w.word == word,
+        orElse: () => InsertedWord(word: '', positions: []),
+      );
+      if (inserted.positions.any((p) => p.x == row && p.y == col)) {
+        return Colors
+            .white; //wordColors[i % wordColors.length].withOpacity(0.5);
+      }
+    }
+
+    return selectedPositions[row][col] ? Colors.white : Colors.black;
   }
 
   @override
@@ -430,19 +464,24 @@ class _GameScreenState extends State<GameScreen> {
               ],
             ),
             SizedBox(height: 2),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 10.0,
-                bottom: 10.0,
-                right: 16,
-                left: 16,
-              ),
-              child: Text(
-                questions[currentQuestionIndex].text,
-                textAlign: TextAlign.center,
-                style: Constants.fontQuestions,
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 500, maxHeight: 210),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: 10.0,
+                  bottom: 10.0,
+                  right: 16,
+                  left: 16,
+                ),
+                child: Text(
+                  questions[currentQuestionIndex].text,
+                  textAlign: TextAlign.center,
+                  maxLines: 4,
+                  style: Constants.fontQuestions,
+                ),
               ),
             ),
+            SizedBox(height: 2),
             // 🧠 Pregunta actual / total
             Padding(
               padding: const EdgeInsets.only(top: 10.0, right: 16, left: 16),
@@ -512,7 +551,7 @@ class _GameScreenState extends State<GameScreen> {
                     onTap: () => _onCellTap(row, col),
                     child: Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.all(2),
+                      margin: EdgeInsets.all(3),
                       decoration: BoxDecoration(
                         color: _getCellColor(row, col),
                         border: Border.all(color: Colors.black26),
@@ -520,6 +559,7 @@ class _GameScreenState extends State<GameScreen> {
                       child: Text(
                         grid[row][col],
                         style: TextStyle(
+                          color: _getCellLetterColor(row, col),
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
