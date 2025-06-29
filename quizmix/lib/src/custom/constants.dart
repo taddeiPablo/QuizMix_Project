@@ -13,7 +13,7 @@ class Constants {
 
   static TextStyle fontGame = TextStyle(
     color: const Color.fromARGB(255, 255, 255, 255),
-    fontSize: 45,
+    fontSize: 35,
     fontFamily: 'baloo',
     fontWeight: FontWeight.bold,
   );

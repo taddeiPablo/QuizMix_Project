@@ -103,6 +103,18 @@ class _GameScreenState extends State<GameScreen> {
       Question('¿ creador del automovil ?', 'Ford'),
       Question('¿ cual es el simbolo quimico del Aluminio ?', 'Al'),
     ],
+    'Literatura': [
+      Question(
+        '¿ cual es el simbolo quimico del Aluminio sdfdsfd fsdfasdf ?',
+        'Aasfasf',
+      ),
+      Question('¿ cual es el simbolo quimico del Aluminio ?', 'Asffasfsl'),
+      Question(
+        '¿ cual es el simbolo quimico del Aluminio dsffsdfdsfsdfsd ?',
+        'Asfasfal',
+      ),
+      Question('¿ cual es el simbolo quimico ?', 'Alsfasfasd'),
+    ],
   };
 
   List<Question> questions = [];
@@ -383,7 +395,8 @@ class _GameScreenState extends State<GameScreen> {
         orElse: () => InsertedWord(word: '', positions: []),
       );
       if (inserted.positions.any((p) => p.x == row && p.y == col)) {
-        return wordColors[i % wordColors.length].withOpacity(0.5);
+        //
+        return wordColors[i % wordColors.length].withOpacity(0.7);
       }
     }
 
@@ -440,7 +453,7 @@ class _GameScreenState extends State<GameScreen> {
           children: [
             Column(
               children: [
-                Text(widget.category, style: Constants.fontGame),
+                /*Text(widget.category, style: Constants.fontGame),*/
                 Text('Puntaje: $score', style: Constants.fontScore),
               ],
             ),
@@ -465,11 +478,11 @@ class _GameScreenState extends State<GameScreen> {
             ),
             SizedBox(height: 2),
             ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 500, maxHeight: 210),
+              constraints: BoxConstraints(maxWidth: 500, maxHeight: 310),
               child: Padding(
                 padding: const EdgeInsets.only(
-                  top: 10.0,
-                  bottom: 10.0,
+                  top: 15.0,
+                  bottom: 15.0,
                   right: 16,
                   left: 16,
                 ),
