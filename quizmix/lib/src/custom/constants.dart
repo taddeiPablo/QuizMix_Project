@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+// aqui creo una clase con atributos estaticos en los cuales almaceno los
+// valores que se utilizaran repetidamente en toda la app
 class Constants {
   static String quizLogosrc = 'assets/images/quiz_logo.png';
 
