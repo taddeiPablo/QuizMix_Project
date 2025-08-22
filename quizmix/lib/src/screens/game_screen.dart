@@ -38,6 +38,8 @@ class _GameScreenState extends State<GameScreen> {
   final Random _random = Random();
   bool helpUsed = false;
   int questionLen = 0;
+  Set<String> selectedCells =
+      {}; // guarda las celdas seleccionadas en formato "row-col"
 
   Map<String, List<Question>> questionCategories = {
     'Historia': [
@@ -434,6 +436,41 @@ class _GameScreenState extends State<GameScreen> {
     super.dispose();
   }
 
+  void _handleTouch(Offset position, int gridSize, BuildContext context) {
+    final renderBox = context.findRenderObject() as RenderBox;
+    final size = renderBox.size;
+    final cellWidth = size.width / gridSize;
+    final cellHeight = size.width / gridSize; // cuadrado
+
+    int col = (position.dx ~/ cellWidth);
+    int row = (position.dy ~/ cellHeight);
+
+    if (row >= 0 && row < gridSize && col >= 0 && col < gridSize) {
+      String key = "$row-$col";
+      if (!selectedCells.contains(key)) {
+        setState(() {
+          selectedCells.add(key);
+        });
+      }
+    }
+  }
+
+  void _validateWord() {
+    // Convertir selectedCells en palabra
+    String word = selectedCells
+        .map((e) {
+          var parts = e.split("-");
+          int r = int.parse(parts[0]);
+          int c = int.parse(parts[1]);
+          return grid[r][c];
+        })
+        .join("");
+
+    print("Palabra seleccionada: $word");
+
+    // TODO: validar si la palabra está en la lista correcta
+  }
+
   @override
   Widget build(BuildContext context) {
     double progressPercent = (currentQuestionIndex + 1) / questions.length;
@@ -551,35 +588,58 @@ class _GameScreenState extends State<GameScreen> {
             ),
 
             Expanded(
-              child: GridView.builder(
-                padding: EdgeInsets.all(12),
-                itemCount: gridSize * gridSize,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: gridSize,
-                ),
-                itemBuilder: (context, index) {
-                  int row = index ~/ gridSize;
-                  int col = index % gridSize;
-                  return GestureDetector(
-                    onTap: () => _onCellTap(row, col),
-                    child: Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.all(3),
-                      decoration: BoxDecoration(
-                        color: _getCellColor(row, col),
-                        border: Border.all(color: Colors.black26),
-                      ),
-                      child: Text(
-                        grid[row][col],
-                        style: TextStyle(
-                          color: _getCellLetterColor(row, col),
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+              child: GestureDetector(
+                onPanStart: (details) {
+                  _handleTouch(details.localPosition, gridSize, context);
+                },
+                onPanUpdate: (details) {
+                  _handleTouch(details.localPosition, gridSize, context);
+                },
+                onPanEnd: (details) {
+                  _validateWord(); // validar palabra formada con selectedCells
+                  setState(() {
+                    selectedCells.clear();
+                  });
+                },
+                child: GridView.builder(
+                  padding: EdgeInsets.all(12),
+                  itemCount: gridSize * gridSize,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: gridSize,
+                  ),
+                  itemBuilder: (context, index) {
+                    int row = index ~/ gridSize;
+                    int col = index % gridSize;
+                    String key = "$row-$col";
+
+                    bool isSelected = selectedCells.contains(key);
+
+                    return GestureDetector(
+                      onTap: () =>
+                          _onCellTap(row, col), // mantiene el tap normal
+                      child: Container(
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? Colors.yellow
+                              : _getCellColor(row, col),
+                          border: Border.all(color: Colors.black26),
+                        ),
+                        child: Text(
+                          grid[row][col],
+                          style: TextStyle(
+                            color: isSelected
+                                ? Colors.black
+                                : _getCellLetterColor(row, col),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
           ],
